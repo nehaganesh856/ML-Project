@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSense ML - About Project</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .about-card {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(47, 209, 143, 0.05);
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+        .about-card h2 {
+            color: var(--accent-primary);
+            margin-bottom: 12px;
+        }
+        ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">EcoSense ML</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
+                <a href="energy.html" class="nav-item">⚡ Energy Monitor</a>
+                <a href="emissions.html" class="nav-item">👣 Carbon Footprint</a>
+                <a href="prediction.html" class="nav-item">🔮 ML Predictions</a>
+                <a href="clustering.html" class="nav-item">🎯 K-Means Clusters</a>
+                <a href="anomalies.html" class="nav-item">⚠️ Anomaly Tracker</a>
+                <a href="recommendations.html" class="nav-item">💡 Recommendations</a>
+                <a href="performance.html" class="nav-item">📈 Performance</a>
+                <a href="dataset.html" class="nav-item">📁 Manage Dataset</a>
+                <a href="about.html" class="nav-item active">ℹ️ About Project</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn" class="nav-item" style="color: var(--error-color);">🚪 Log Out</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header-bar">
+                <div>
+                    <h1>Project Information</h1>
+                    <p style="color: var(--text-secondary); margin-top: -15px; font-size: 14px;">Documentation, architectures and academic references</p>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">U</div>
+                </div>
+            </header>
+
+            <!-- 1. Description -->
+            <div class="about-card">
+                <h2>EcoSense ML Portal</h2>
+                <p>
+                    <strong>EcoSense ML</strong> is an academic full-stack prototype designed for second-year college students. 
+                    It demonstrates the integration of machine learning pipelines inside responsive web interfaces to solve environmental challenges.
+                    The system implements real-time loading of household electricity datasets, calculates carbon footprint equivalents, trains regression/clustering models, isolates consumption anomalies, and generates personalized conservation recommendations.
+                </p>
+            </div>
+
+            <!-- 2. ML pipeline -->
+            <div class="about-card">
+                <h2>Integrated Machine Learning Models</h2>
+                <p>The application deploys 5 distinct ML architectures to process the power data:</p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Random Forest Regressor (Supervised):</strong> Predicts energy load for the next hour using engineered lag variables and moving averages.</li>
+                    <li><strong>XGBoost Regressor (Supervised):</strong> Uses gradient-boosted decision trees to forecast immediate household load indices.</li>
+                    <li><strong>LSTM Neural Network (Supervised Sequence):</strong> Built using TensorFlow Keras. Leverages historical sequences of load draws to perform multi-step forecasts for the next 24 hours.</li>
+                    <li><strong>K-Means Clustering (Unsupervised):</strong> Groups daily/hourly consumption patterns into distinct user segments (Low, Moderate, and High load) to establish profile centroids.</li>
+                    <li><strong>Isolation Forest (Unsupervised Anomaly):</strong> Measures the isolation distance of active load profiles to flag load spikes and heavy appliance draws without requiring annotated training labels.</li>
+                </ul>
+            </div>
+
+            <!-- 3. Tech Stack -->
+            <div class="about-card">
+                <h2>Technology Stack</h2>
+                <ul>
+                    <li><strong>Backend Architecture:</strong> Python, Flask Microframework, SQLAlchemy ORM</li>
+                    <li><strong>Database:</strong> SQLite database system (self-generating file structure)</li>
+                    <li><strong>Frontend UI System:</strong> Vanilla HTML5, CSS3 Grid/Flexbox/Glassmorphism theme, Chart.js for graphs</li>
+                    <li><strong>Machine Learning Engines:</strong> Pandas, NumPy, scikit-learn, XGBoost, TensorFlow Keras</li>
+                </ul>
+            </div>
+
+            <!-- 4. Team details -->
+            <div class="about-card">
+                <h2>Project Team Structure & Contributions</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px;">
+                    <div>
+                        <h4 style="color: var(--accent-secondary);">Student Contribution 1</h4>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-top: 5px;">
+                            Focused on database model creation, CSV ingestion, data preprocessing modules, and regression modeling (Random Forest, XGBoost, LSTM).
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-secondary);">Student Contribution 2</h4>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-top: 5px;">
+                            Focused on unsupervised model pipelines (K-Means, Isolation Forest), rule-based recommendation logic, CSS styles, and Chart.js UI scripting.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Live ML Metrics -->
+            <div class="about-card">
+                <h2>Model Performance Metrics</h2>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 15px;">
+                    Real empirical test evaluation metrics calculated across trained Machine Learning models:
+                </p>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; text-align: left; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color, #e0e0e0);">
+                                <th style="padding: 10px;">Model</th>
+                                <th style="padding: 10px;">MAE</th>
+                                <th style="padding: 10px;">MSE</th>
+                                <th style="padding: 10px;">RMSE</th>
+                                <th style="padding: 10px;">R² Score</th>
+                                <th style="padding: 10px;">MAPE</th>
+                                <th style="padding: 10px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+                                <td style="padding: 10px;"><strong>Random Forest Regressor</strong></td>
+                                <td style="padding: 10px;" id="tbl-rf-mae">-</td>
+                                <td style="padding: 10px;" id="tbl-rf-mse">-</td>
+                                <td style="padding: 10px;" id="tbl-rf-rmse">-</td>
+                                <td style="padding: 10px; color:var(--accent-primary); font-weight:600;" id="tbl-rf-r2">-</td>
+                                <td style="padding: 10px;" id="tbl-rf-mape">-</td>
+                                <td style="padding: 10px;" id="tbl-rf-status">Checking...</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+                                <td style="padding: 10px;"><strong>XGBoost Regressor</strong></td>
+                                <td style="padding: 10px;" id="tbl-xgb-mae">-</td>
+                                <td style="padding: 10px;" id="tbl-xgb-mse">-</td>
+                                <td style="padding: 10px;" id="tbl-xgb-rmse">-</td>
+                                <td style="padding: 10px; color:var(--accent-primary); font-weight:600;" id="tbl-xgb-r2">-</td>
+                                <td style="padding: 10px;" id="tbl-xgb-mape">-</td>
+                                <td style="padding: 10px;" id="tbl-xgb-status">Checking...</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+                                <td style="padding: 10px;"><strong>Linear Regression</strong></td>
+                                <td style="padding: 10px;" id="tbl-lr-mae">-</td>
+                                <td style="padding: 10px;" id="tbl-lr-mse">-</td>
+                                <td style="padding: 10px;" id="tbl-lr-rmse">-</td>
+                                <td style="padding: 10px; color:var(--accent-primary); font-weight:600;" id="tbl-lr-r2">-</td>
+                                <td style="padding: 10px;" id="tbl-lr-mape">-</td>
+                                <td style="padding: 10px;" id="tbl-lr-status">Checking...</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+                                <td style="padding: 10px;"><strong>LSTM Neural Network</strong></td>
+                                <td style="padding: 10px;" id="tbl-lstm-mae">-</td>
+                                <td style="padding: 10px;" id="tbl-lstm-mse">-</td>
+                                <td style="padding: 10px;" id="tbl-lstm-rmse">-</td>
+                                <td style="padding: 10px; color:var(--accent-primary); font-weight:600;" id="tbl-lstm-r2">-</td>
+                                <td style="padding: 10px;" id="tbl-lstm-mape">-</td>
+                                <td style="padding: 10px;" id="tbl-lstm-status">Checking...</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+                                <td style="padding: 10px;"><strong>K-Means Clustering</strong></td>
+                                <td style="padding: 10px;" colspan="5">Silhouette Score: <strong id="tbl-kmeans-sil" style="color:var(--accent-primary);">-</strong></td>
+                                <td style="padding: 10px;" id="tbl-kmeans-status">Checking...</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color, #eee);">
+                                <td style="padding: 10px;"><strong>Isolation Forest</strong></td>
+                                <td style="padding: 10px;" colspan="5">
+                                    Anomalies: <strong id="tbl-if-count">-</strong> | Pct: <strong id="tbl-if-percentage">-</strong> | Contamination: <strong id="tbl-if-contamination">-</strong>
+                                </td>
+                                <td style="padding: 10px;" id="tbl-if-status">Checking...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 6. Academic citations -->
+            <div class="about-card">
+                <h2>Academic Citation & Dataset Reference</h2>
+                <p style="font-size: 14px; color: var(--text-secondary);">
+                    <strong>Dataset Source:</strong> Georges Hébrail and Alice Bérard, "Individual Household Electric Power Consumption Dataset", UCI Machine Learning Repository, 2012. 
+                    <br><br>
+                    <strong>Citations:</strong> This academic software uses open-source libraries: Scikit-learn (Pedregosa et al., JMLR 2011), XGBoost (Chen & Guestrin, KDD 2016), and TensorFlow (Abadi et al., OSDI 2016).
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/performance.js"></script>
+</body>
+</html>

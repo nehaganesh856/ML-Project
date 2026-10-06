@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSense ML - Recommendations</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">EcoSense ML</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
+                <a href="energy.html" class="nav-item">⚡ Energy Monitor</a>
+                <a href="emissions.html" class="nav-item">👣 Carbon Footprint</a>
+                <a href="prediction.html" class="nav-item">🔮 ML Predictions</a>
+                <a href="clustering.html" class="nav-item">🎯 K-Means Clusters</a>
+                <a href="anomalies.html" class="nav-item">⚠️ Anomaly Tracker</a>
+                <a href="recommendations.html" class="nav-item active">💡 Recommendations</a>
+                <a href="performance.html" class="nav-item">📈 Performance</a>
+                <a href="dataset.html" class="nav-item">📁 Manage Dataset</a>
+                <a href="about.html" class="nav-item">ℹ️ About Project</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn" class="nav-item" style="color: var(--error-color);">🚪 Log Out</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header-bar">
+                <div>
+                    <h1>Sustainability Recommendations</h1>
+                    <p style="color: var(--text-secondary); margin-top: -15px; font-size: 14px;">Rule-based energy conservation tips derived from your consumption clusters and isolated load spikes</p>
+                </div>
+                <div class="user-profile">
+                    <button class="btn" id="refresh-recs-btn">🔄 Refresh Insights</button>
+                    <div class="user-avatar">U</div>
+                </div>
+            </header>
+
+            <!-- Recommendation Info Card -->
+            <div class="chart-card" style="margin-bottom: 30px;">
+                <h2>How Recommendations Work</h2>
+                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-top: 10px;">
+                    Our rule-based engine audits your records to flag peak consumption hours, identifies the frequency of load spikes (anomalies), 
+                    evaluates your carbon intensity, and checks your K-Means cluster assignment. 
+                    These calculations are combined to produce actionable tips to reduce carbon emissions and electricity expenses.
+                </p>
+            </div>
+
+            <!-- List Container -->
+            <div class="recs-container" id="recommendations-list">
+                <!-- recommendation cards will be populated here -->
+                <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    No recommendations generated yet. Upload data and refresh insights.
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/recommendations.js"></script>
+</body>
+</html>

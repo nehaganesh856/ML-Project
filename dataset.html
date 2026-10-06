@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSense ML - Manage Dataset</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">EcoSense ML</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
+                <a href="energy.html" class="nav-item">⚡ Energy Monitor</a>
+                <a href="emissions.html" class="nav-item">👣 Carbon Footprint</a>
+                <a href="prediction.html" class="nav-item">🔮 ML Predictions</a>
+                <a href="clustering.html" class="nav-item">🎯 K-Means Clusters</a>
+                <a href="anomalies.html" class="nav-item">⚠️ Anomaly Tracker</a>
+                <a href="recommendations.html" class="nav-item">💡 Recommendations</a>
+                <a href="performance.html" class="nav-item">📈 Performance</a>
+                <a href="dataset.html" class="nav-item active">📁 Manage Dataset</a>
+                <a href="about.html" class="nav-item">ℹ️ About Project</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn" class="nav-item" style="color: var(--error-color);">🚪 Log Out</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header-bar">
+                <div>
+                    <h1>Dataset & Logs Management</h1>
+                    <p style="color: var(--text-secondary); margin-top: -15px; font-size: 14px;">Upload household consumption CSVs, check quality metrics, and manage SQLite databases</p>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">U</div>
+                </div>
+            </header>
+
+            <!-- Upload and Info cards -->
+            <div class="chart-grid">
+                <!-- CSV Upload card -->
+                <div class="chart-card">
+                    <h2>Upload Consumption Logs</h2>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px;">
+                        Select your <strong>household_power_consumption.csv</strong> file. 
+                        To ensure fast model training locally, we recommend sampling the aggregated dataset.
+                    </p>
+                    
+                    <form id="upload-form">
+                        <label for="sample-size-input" style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary); font-weight:600; text-transform:uppercase;">Training Sample Size (Aggregated Hours)</label>
+                        <input type="number" id="sample-size-input" value="50000" min="500" max="200000" style="margin-bottom: 20px;">
+
+                        <div class="upload-zone" id="drop-zone">
+                            <span class="upload-icon">📂</span>
+                            <h3 id="upload-zone-text">Drag and drop file here or click to browse</h3>
+                            <input type="file" id="file-input" accept=".csv" style="display: none;">
+                        </div>
+                        
+                        <div class="progress-container" id="upload-progress-wrapper">
+                            <div class="progress-bar-wrapper">
+                                <div class="progress-bar" id="upload-progress-bar"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span id="upload-progress-status">Uploading...</span>
+                                <span id="upload-progress-percent">0%</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn" id="upload-submit-btn" style="width: 100%; margin-top: 10px;" disabled>📤 Process & Import Data</button>
+                    </form>
+                </div>
+
+                <!-- Database Metrics card -->
+                <div class="chart-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <h2>Active Logs Summary</h2>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">
+                            Summary of data loaded into the local SQLite database schema.
+                        </p>
+                        <div id="active-logs-info-msg" style="color: var(--warning-color); font-size: 14px; margin-top: 10px; margin-bottom: 10px; display: none;"></div>
+                        
+                        <div style="line-height: 2.2; margin-top: 20px;">
+                            <p>📊 <strong>Total Stored Hours:</strong> <span id="summary-records-count">0</span></p>
+                            <p>📅 <strong>Earliest Log Timestamp:</strong> <span id="summary-start-date">N/A</span></p>
+                            <p>📅 <strong>Latest Log Timestamp:</strong> <span id="summary-end-date">N/A</span></p>
+                            <p>⭐ <strong>Min hourly load:</strong> <span id="summary-min-energy">0.00 kWh</span></p>
+                            <p>⭐ <strong>Max hourly load:</strong> <span id="summary-max-energy">0.00 kWh</span></p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                        <div style="display: flex; gap: 10px; width: 100%;">
+                            <button class="btn btn-secondary" id="download-original-btn" style="flex-grow: 1; font-size: 13px;" disabled>📥 Download Original CSV</button>
+                            <button class="btn btn-secondary" id="download-db-btn" style="flex-grow: 1; font-size: 13px;" disabled>📥 Download Processed CSV</button>
+                        </div>
+                        <button class="btn btn-danger" id="clear-db-btn" style="width: 100%;">🗑️ Clear Stored Data</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="chart-card" style="margin-top: 30px;">
+                <h2>UCI Dataset Information & Guide</h2>
+                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-top: 10px;">
+                    This application is built to load the <strong>Individual Household Electric Power Consumption</strong> dataset from the UCI Machine Learning Repository. 
+                    The raw dataset contains almost 2,075,259 minutely electrical measurements. 
+                    The columns must contain standard titles: <em>Date, Time, Global_active_power, Global_reactive_power, Voltage, Global_intensity, Sub_metering_1, Sub_metering_2, Sub_metering_3</em>.
+                    <br><br>
+                    During import, our backend pipeline parses datetimes, fills missing fields using forward-fills, clips anomalous household voltage levels, calculates aggregated hourly averages to compile energy consumptions (kWh) and carbon footprints (kg CO₂), and updates the SQLite tables.
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dataset.js"></script>
+</body>
+</html>

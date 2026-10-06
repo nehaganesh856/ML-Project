@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSense ML - ML Predictions</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">EcoSense ML</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
+                <a href="energy.html" class="nav-item">⚡ Energy Monitor</a>
+                <a href="emissions.html" class="nav-item">👣 Carbon Footprint</a>
+                <a href="prediction.html" class="nav-item active">🔮 ML Predictions</a>
+                <a href="clustering.html" class="nav-item">🎯 K-Means Clusters</a>
+                <a href="anomalies.html" class="nav-item">⚠️ Anomaly Tracker</a>
+                <a href="recommendations.html" class="nav-item">💡 Recommendations</a>
+                <a href="performance.html" class="nav-item">📈 Performance</a>
+                <a href="dataset.html" class="nav-item">📁 Manage Dataset</a>
+                <a href="about.html" class="nav-item">ℹ️ About Project</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn" class="nav-item" style="color: var(--error-color);">🚪 Log Out</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header-bar">
+                <div>
+                    <h1>Machine Learning Predictions</h1>
+                    <p style="color: var(--text-secondary); margin-top: -15px; font-size: 14px;">Hourly consumption regression forecasting and sequence modeling</p>
+                </div>
+                <div class="user-profile">
+                    <button class="btn btn-secondary" id="retrain-models-btn">⚙️ Retrain Models</button>
+                    <div class="user-avatar">U</div>
+                </div>
+            </header>
+
+            <!-- Background training progress bar (hidden by default) -->
+            <div id="training-progress-card" class="chart-card" style="display: none; margin-bottom: 30px; border-left: 5px solid var(--accent-primary);">
+                <h3 id="training-title" style="color: var(--accent-primary);">Model Training Running in Background</h3>
+                <p id="training-msg" style="color: var(--text-secondary); font-size:13px; margin-bottom: 15px;">Initializing worker...</p>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar" id="training-progress-bar"></div>
+                </div>
+                <span id="training-percent-txt" style="font-size:12px; color:var(--text-secondary);">0% Complete</span>
+            </div>
+
+            <!-- Untrained / Active Dataset Warning Banner -->
+            <div id="untrained-warning-banner" class="chart-card" style="display: none; margin-bottom: 30px; border-left: 5px solid var(--warning-color); background: linear-gradient(135deg, rgba(253, 126, 20, 0.1), rgba(255, 193, 7, 0.05));">
+                <h3 style="color: var(--warning-color); display: flex; align-items: center; gap: 8px; margin: 0 0 8px 0;">
+                    <span>⚠️</span> Models Not Fully Trained for Active Dataset
+                </h3>
+                <p id="untrained-warning-msg" style="color: var(--text-primary); font-size:13px; margin: 0 0 12px 0;">
+                    ⚠️ Models are not fully trained for the active dataset. Predictions and charts may fail or be outdated. Please navigate to the Model Metrics tab and click Train Models.
+                </p>
+                <a href="performance.html" class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none; display: inline-block;">🛠️ Go to Model Performance & Train Models</a>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('rf-tab')">🌲 Random Forest</button>
+                <button class="tab-btn" onclick="switchTab('xgb-tab')">🚀 XGBoost</button>
+                <button class="tab-btn" onclick="switchTab('lstm-tab')">🧠 LSTM Sequence Network</button>
+            </div>
+
+            <!-- Tab Contents -->
+
+            <!-- 1. Random Forest Tab -->
+            <div id="rf-tab" class="tab-content active">
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <span class="card-title">Next Hour Predicted Energy</span>
+                        <span class="card-value" id="rf-pred-energy">0.00 <span style="font-size:14px;">kWh</span></span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Next Hour Predicted Carbon</span>
+                        <span class="card-value" id="rf-pred-carbon">0.00 <span style="font-size:14px;">kg CO₂</span></span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Model MAE</span>
+                        <span class="card-value" id="rf-mae" style="color:var(--accent-secondary);">0.00</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Model R² Score</span>
+                        <span class="card-value" id="rf-r2" style="color:var(--accent-primary);">0.00</span>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <h2>Top Engineered Features Importance</h2>
+                        <p style="color: var(--text-secondary); font-size:13px; margin-bottom: 15px;">
+                            Importance levels of lag variables, rolling means, and calendar encodings.
+                        </p>
+                        <div class="chart-wrapper">
+                            <canvas id="rf-importance-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h2>Model Specifications</h2>
+                        <div style="margin-top:20px; line-height:2;">
+                            <p>🌳 <strong>Type:</strong> RandomForestRegressor</p>
+                            <p>📊 <strong>Parameters:</strong> n_estimators=100, max_depth=15</p>
+                            <p>🔒 <strong>Scale Method:</strong> MinMaxScaler (0-1 normalization)</p>
+                            <p>⏳ <strong>Chronological Split:</strong> 80% Train, 20% Test</p>
+                            <p>🎯 <strong>Objective:</strong> Predict next hour electricity load based on lag features</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. XGBoost Tab -->
+            <div id="xgb-tab" class="tab-content">
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <span class="card-title">Next Hour Predicted Energy</span>
+                        <span class="card-value" id="xgb-pred-energy">0.00 <span style="font-size:14px;">kWh</span></span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Next Hour Predicted Carbon</span>
+                        <span class="card-value" id="xgb-pred-carbon">0.00 <span style="font-size:14px;">kg CO₂</span></span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Model MAE</span>
+                        <span class="card-value" id="xgb-mae" style="color:var(--accent-secondary);">0.00</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Model R² Score</span>
+                        <span class="card-value" id="xgb-r2" style="color:var(--accent-primary);">0.00</span>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <h2>XGBoost Feature Importance</h2>
+                        <p style="color: var(--text-secondary); font-size:13px; margin-bottom: 15px;">
+                            Feature weights assigned by the gradient boosted trees model.
+                        </p>
+                        <div class="chart-wrapper">
+                            <canvas id="xgb-importance-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h2>Model Specifications</h2>
+                        <div style="margin-top:20px; line-height:2;">
+                            <p>🚀 <strong>Type:</strong> xgboost.XGBRegressor</p>
+                            <p>📊 <strong>Parameters:</strong> learning_rate=0.1, n_estimators=100</p>
+                            <p>🔒 <strong>Scale Method:</strong> MinMaxScaler (0-1 normalization)</p>
+                            <p>⏳ <strong>Chronological Split:</strong> 80% Train, 20% Test</p>
+                            <p>🎯 <strong>Objective:</strong> Gradient boosting regression on engineered load indices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. LSTM Tab -->
+            <div id="lstm-tab" class="tab-content">
+                <div class="summary-grid">
+                    <div class="summary-card" style="grid-column: span 2;">
+                        <span class="card-title">Sequence Specs</span>
+                        <div style="display:flex; justify-content:space-between; margin-top:5px;">
+                            <span>⏳ Sequence Length: <strong>24 hours</strong></span>
+                            <span>🏗️ Layer 1: <strong>LSTM (50 units)</strong></span>
+                            <span>🏗️ Layer 2: <strong>LSTM (25 units)</strong></span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Model MAE</span>
+                        <span class="card-value" id="lstm-mae" style="color:var(--accent-secondary);">0.00</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-title">Model RMSE</span>
+                        <span class="card-value" id="lstm-rmse" style="color:var(--accent-primary);">0.00</span>
+                    </div>
+                </div>
+
+                <div class="chart-card" style="margin-bottom: 30px;">
+                    <h2>24-Hour Electricity Load Forecast (LSTM)</h2>
+                    <p style="color: var(--text-secondary); font-size:13px; margin-bottom: 15px;">
+                        Recursive multi-step forecast predicting hourly energy load profiles for the next day.
+                    </p>
+                    <div class="chart-wrapper">
+                        <canvas id="lstm-forecast-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/prediction.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSense ML - Carbon Footprint</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">EcoSense ML</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
+                <a href="energy.html" class="nav-item">⚡ Energy Monitor</a>
+                <a href="emissions.html" class="nav-item active">👣 Carbon Footprint</a>
+                <a href="prediction.html" class="nav-item">🔮 ML Predictions</a>
+                <a href="clustering.html" class="nav-item">🎯 K-Means Clusters</a>
+                <a href="anomalies.html" class="nav-item">⚠️ Anomaly Tracker</a>
+                <a href="recommendations.html" class="nav-item">💡 Recommendations</a>
+                <a href="performance.html" class="nav-item">📈 Performance</a>
+                <a href="dataset.html" class="nav-item">📁 Manage Dataset</a>
+                <a href="about.html" class="nav-item">ℹ️ About Project</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn" class="nav-item" style="color: var(--error-color);">🚪 Log Out</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header-bar">
+                <div>
+                    <h1>Carbon Footprint Analysis</h1>
+                    <p style="color: var(--text-secondary); margin-top: -15px; font-size: 14px;">Estimate ecological impact from active energy metrics</p>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">U</div>
+                </div>
+            </header>
+
+            <!-- Emission factor configuration -->
+            <div class="chart-grid">
+                <div class="chart-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <h2>Grid Carbon Intensity Settings</h2>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">
+                        Adjust the regional grid emission factor (default is 0.5 kg CO₂ per kWh for typical coal-heavy grids). 
+                        Update this value to match your local utility data.
+                    </p>
+                    <div>
+                        <label for="emission-factor-input" style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary); font-weight:600; text-transform:uppercase;">Emission Factor (kg CO₂ / kWh)</label>
+                        <div style="display: flex; gap: 15px;">
+                            <input type="number" id="emission-factor-input" step="0.01" min="0.01" max="2.0" value="0.5" style="margin-bottom:0; max-width: 150px;">
+                            <button class="btn" id="update-factor-btn">💾 Update Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h2>Ecology Conversion & Offsets</h2>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px;">
+                        What does your footprint actually mean? Equivalent metrics derived from your total emission logs.
+                    </p>
+                    
+                    <div class="equiv-grid">
+                        <div class="equiv-item">
+                            <span class="offset-icon">🌲</span>
+                            <span class="equiv-val" id="tree-offset-val">0.0</span>
+                            <span class="equiv-lbl">Tree-Months required to absorb</span>
+                        </div>
+                        <div class="equiv-item">
+                            <span class="offset-icon">🚗</span>
+                            <span class="equiv-val" id="car-miles-val">0.0</span>
+                            <span class="equiv-lbl">Average Car Miles Driven</span>
+                        </div>
+                        <div class="equiv-item">
+                            <span class="offset-icon">📱</span>
+                            <span class="equiv-val" id="phone-charge-val">0</span>
+                            <span class="equiv-lbl">Smartphones Charged</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disclaimer alert box -->
+            <div class="summary-card" style="margin-bottom: 30px; border-left: 5px solid var(--warning-color); flex-direction: row; align-items: center; gap: 20px; background-color: rgba(243, 156, 18, 0.05);">
+                <div style="font-size: 28px;">⚠️</div>
+                <div>
+                    <h3 style="margin-bottom: 3px; color: var(--warning-color);">Scientific Disclaimer</h3>
+                    <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.4;">
+                        Emissions are mathematical estimates derived from household electricity consumption (kWh) 
+                        and the configured grid emission intensity factor. Real-world values depend on power grid mix, time of day, and weather patterns.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart views -->
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h2>Carbon Footprint Timeline (kg CO₂)</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="emissions-timeline-chart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h2>Emissions Load by Hour of Day</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="emissions-hourly-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/emissions.js"></script>
+</body>
+</html>
